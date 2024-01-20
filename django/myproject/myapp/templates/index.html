@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Page App</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="nav__link" data-link>Dashboard</a>
+        <a href="/posts" class="nav__link" data-link>Posts</a>
+        <a href="/settings" class="nav__link" data-link>Settings</a>
+        <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-765eadf5bbe4aa9d2acfee8fa907879b4bf3366569e5315f8eb815a73304c5ba&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Foauth&response_type=code" class="nav__link">Logins</a>
+
+    </nav>
+    <div id="app"></div>
+    <script type="module" src="/static/js/index.js"></script>
+</body>
+</html>
