@@ -1,0 +1,123 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Page App</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+
+<body>
+    <nav class="nav">
+        <a href="/" class="nav__link" data-link>Dashboard</a>
+        <a href="/posts" class="nav__link" data-link>Posts</a>
+        <a href="/settings" class="nav__link" onclick="console.log('dfdfd')" data-link>Settings</a>
+    </nav>
+    <div id=" app"></div>
+    <script type="module" src="/static/js/index.js"></script>
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Tournament Log</title>
+    <style>
+        .game-item {
+            display: flex;
+            grid-template-columns: 1fr 1fr 1fr;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <row>
+            <div class="col-md-12 mb-5 mt-4 d-flex align-items-center justify-content-center">
+                <h1>Tournament Log</h1>
+            </div>
+        </row>
+        <ul id="tournamentList" class="list-group">
+            <!-- Tournament data will be appended here -->
+        </ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        let tournamentLogData;
+
+        function populateTournamentList() {
+
+            // Clear any existing content
+            let tournamentData = JSON.parse(tournamentLogData);
+            console.log(tournamentData);
+            console.log(tournamentData.tournamentLog);
+            const tournamentList = document.getElementById('tournamentList');
+
+            tournamentData.tournamentLog.forEach((tournamentData, index) => {
+                const tournamentItem = document.createElement('li');
+                tournamentItem.className = 'list-group-item shadow mt-4 border rounded';
+                tournamentItem.innerHTML = `<h4>Tournament ${index + 1}</h4>`;
+
+                if (tournamentData.tournament.length > 0) {
+                    const gameList = document.createElement('ul');
+                    gameList.className = 'list-group ';
+
+                    tournamentData.tournament.forEach((game, gameIndex) => {
+                        const gameItem = document.createElement('li');
+                        gameItem.className = 'list-group-item';
+                        if (gameIndex === 2) {
+                            // gameItem.classList.add('bg-secondary');
+                            gameItem.classList.add('text-primary'); // Bootstrap 클래스를 사용하여 배경색 변경
+                        }
+                        const winnerTemplate = `<strong>Winner:</strong> <span class="name">${game.winner.name}</span>, <span class="score">Score: ${game.winner.score}</span>`;
+                        const loserTemplate = `<strong>Loser:</strong> <span class="name">${game.loser.name}</span>, <span class="score">Score: ${game.loser.score}</span>`;
+                        gameItem.innerHTML = `
+                        <div class="game-item">
+                            <div class="text-start game-id">Game ID: ${game.game_id}</div>
+                            <div class="text-start winner">${winnerTemplate}</div>
+                            <div class="text-start loser">${loserTemplate}</div>
+                        </div>
+
+                        `;
+
+                        gameList.appendChild(gameItem);
+                    });
+
+                    tournamentItem.appendChild(gameList);
+                } else {
+                    tournamentItem.innerHTML += '<p>No games in this tournament.</p>';
+                }
+
+                tournamentList.appendChild(tournamentItem);
+            });
+        }
+
+        async function getTournamentLog() {
+            await fetch('/tournament/log')
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data);
+                    tournamentLogData = data;
+                    populateTournamentList();
+                });
+        }
+
+        // 페이지 로드 후 토너먼트 데이터 추가
+        document.addEventListener('DOMContentLoaded', getTournamentLog);
+
+        // </script>
+</body>
+
+</html>
