@@ -5,10 +5,10 @@ FROM python:3.9-slim
 
 RUN apt-get update -y \
     && apt-get install -y --no-install-recommends \
-        dumb-init \
-        netcat-openbsd \
-        gcc \
-        libc-dev \
+    dumb-init \
+    netcat-openbsd \
+    gcc \
+    libc-dev \
     && rm -rf /var/lib/apt/lists/* \
     && pip install --upgrade pip\
     && pip install django \
@@ -23,7 +23,7 @@ ENV PYTHONUNBUFFERED 1
 
 # Set the working directory in the container
 WORKDIR /usr/src/app/myproject
-
+COPY ./myproject/ /usr/src/app/myproject
 
 # Expose port 8000
 EXPOSE 8000

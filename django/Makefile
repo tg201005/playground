@@ -2,10 +2,9 @@
 
 # Variables
 CONTAINER_NAME = django-container
-DOCKER_IMAGE = django:latest
+DOCKER_IMAGE = django-image
 DOCKER_BUILD_CONTEXT = .
-HOST_VOLUME = /Users/leetaekwon/Documents/coding/playground/django
-CONTAINER_VOLUME = /usr/src/app
+ONTAINER_VOLUME = /usr/src/app
 
 .PHONY: build run stop
 
@@ -17,12 +16,17 @@ build:
 
 # Run the Docker container
 run:
-	docker run -it -p 8000:8000  -v $(HOST_VOLUME):$(CONTAINER_VOLUME)  --name $(CONTAINER_NAME) $(DOCKER_IMAGE) /bin/bash
+	docker run -it -p 8000:8000  --name $(CONTAINER_NAME) $(DOCKER_IMAGE) /bin/bash
 
 # Stop and remove the Docker container
 clean:
 	docker stop $(CONTAINER_NAME)
 	docker rm $(CONTAINER_NAME)
+
+fclean: clean
+	docker rmi $(DOCKER_IMAGE)
+
+re : fclean all
 
 c1 :
 	docker exec -it $(CONTAINER_NAME) /bin/bash
